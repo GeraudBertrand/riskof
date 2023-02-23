@@ -148,11 +148,12 @@ function createTooltip(item) {
  */
 function searchAndReplace(text, search, item) {
     let tosearch = "%" + search +"%";
-    console.log(text);
-    console.log(tosearch);
     let matches = text.match(tosearch);
     if (matches != null) {
         matches.forEach(match => {
+            if(item[search] < 1){
+                item[search] = item[search] * 100;
+            }
             text = text.replace(match, "<span class='color-" + search + "'>" + item[search] + "</span>");
         });
     }

@@ -22,10 +22,10 @@
 
 details summary{
   list-style: none;
-  font-weight: bolder;
+  font-weight: 500;
   font-size: 1.5rem;
   transition: all 400ms;
-
+  margin: 0 2rem;
 }
 
 summary:hover{
@@ -42,7 +42,7 @@ summary.focused{
 }
 
 .card-image:hover{
-    transform: scale(1.1);
+    transform: scale(1.2);
     transition: all 0.3s ease;
 }
 
@@ -73,7 +73,7 @@ summary.focused{
     border-style: solid;
     border-color: transparent rgba(86, 86, 86) transparent transparent;
 }
-.card:hover > .tooltiptext {
+.card-image:hover + .tooltiptext {
     visibility: visible;
 }
 
