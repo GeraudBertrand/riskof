@@ -1,0 +1,92 @@
+.card-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 2rem 1rem;
+    margin: 0.5rem 1rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.card{
+    margin : 8px;
+    position: relative;
+}
+
+.card .card-image{
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+}
+
+details summary{
+  list-style: none;
+  font-weight: bolder;
+  font-size: 1.5rem;
+  transition: all 400ms;
+
+}
+
+summary:hover{
+    text-decoration: underline;
+    font-size: 2rem;
+}
+
+summary.open{
+    font-size:2rem;
+}
+
+summary.focused{
+    text-decoration: underline;
+}
+
+.card-image:hover{
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+}
+
+
+  
+.card > .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    min-height: 200px;
+    background-color: rgb(86, 86, 86);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 20px 5px;
+    position: absolute;
+    z-index: 101;
+    top: -5px;
+    left: 110%;
+}
+  
+.card > .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent rgba(86, 86, 86) transparent transparent;
+}
+.card:hover > .tooltiptext {
+    visibility: visible;
+}
+
+.tooltiptext .tooltip-name{
+    font-size: 1.5rem;
+    font-weight: bolder;
+    margin-bottom: 1rem;
+}
+
+.tooltiptext .tooltip-description{
+    font-size: 1rem;
+    font-weight: lighter;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: solid 5px var(--border-color);
+}
