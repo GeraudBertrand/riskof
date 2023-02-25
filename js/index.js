@@ -59,7 +59,7 @@ function createCard(container, item) {
     card.classList.add("card");
     let image = document.createElement("img");
     image.classList.add("card-image");
-    image.src = "data:image/jpeg;base64," +item.image;
+    image.src = "/Content/image/item/" +item.image+".webp";
     image.alt = item.name;
     card.appendChild(image);
     //tooltip from span

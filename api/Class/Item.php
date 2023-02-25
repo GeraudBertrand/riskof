@@ -36,7 +36,7 @@ class Item implements \JsonSerializable {
         }
 
         if(!empty($image)){
-            $this->image = base64_encode($image);
+            $this->image = $image;
         }
 
         if(!empty($effect)){
