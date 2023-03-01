@@ -204,5 +204,19 @@ class Model{
         }
         return null;
     }
+
+
+    /**
+     * Insert a new image into the database with the item_id and item_image
+     * item_image is a blob
+     * @param int $id
+     * @param string $image
+     */
+    public function insert_image(int $id, $image) {
+        $requete = $this->bdd->prepare('INSERT INTO `item_image` (`item_id`, `image`) VALUES (:id, :image);');
+        $requete->bindValue(':id', $id, PDO::PARAM_INT);
+        $requete->bindValue(':image', $image, PDO::PARAM_STR);
+        $requete->execute();
+    }
 }
 ?>
