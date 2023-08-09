@@ -10,22 +10,22 @@
 # If you don't use filenames to version, lower the CSS and JS to something like
 # "access plus 1 week".
 
-<IfModule mod_expires.c>
-  ExpiresActive on
+#<IfModule mod_expires.c>
+#  ExpiresActive off
 
 # Your document html
-  ExpiresByType text/html "access plus 0 seconds"
+#  ExpiresByType text/html "access plus 0 seconds"
 
 # Media: images, video, audio
-  ExpiresByType audio/ogg "access plus 1 month"
-  ExpiresByType image/gif "access plus 1 month"
-  ExpiresByType image/jpeg "access plus 1 month"
-  ExpiresByType image/png "access plus 1 month"
-  ExpiresByType video/mp4 "access plus 1 month"
-  ExpiresByType video/ogg "access plus 1 month"
-  ExpiresByType video/webm "access plus 1 month"
+#  ExpiresByType audio/ogg "access plus 1 month"
+#  ExpiresByType image/gif "access plus 1 month"
+#  ExpiresByType image/jpeg "access plus 1 month"
+#  ExpiresByType image/png "access plus 1 month"
+#  ExpiresByType video/mp4 "access plus 1 month"
+#  ExpiresByType video/ogg "access plus 1 month"
+#  ExpiresByType video/webm "access plus 1 month"
 
 # CSS and JavaScript
-  ExpiresByType application/javascript "access plus 1 week"
-  ExpiresByType text/css "access plus 1 week"
-</IfModule>
+#  ExpiresByType application/javascript "access plus 1 week"
+#  ExpiresByType text/css "access plus 1 week"
+#</IfModule>

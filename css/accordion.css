@@ -60,50 +60,71 @@ summary.focused{
     z-index: 101;
     top: 80px;
     left: -25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
   
+.card > .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent rgba(86, 86, 86) transparent transparent;
+}
+
 .card-image:hover + .tooltiptext {
     visibility: visible;
 }
 
 .tooltiptext .tooltip-name{
+    font-family: 'Tektur Condensed';
     font-size: 1.5rem;
     font-weight: bolder;
-    margin-bottom: 1rem;
 }
 
 .tooltiptext .tooltip-description{
     font-size: 1rem;
     font-weight: lighter;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: solid 5px var(--border-color);
+}
+
+.tooltiptext .tooltip-small-line{
+    border: solid 3px var(--border-color);
+    border-radius: 12px;
+    width: 85%;
+    margin: 1.5rem 0 0.75rem 0;
+}
+
+.tooltiptext .tooltip-line{
+    border: solid 4px var(--border-color);
+    border-radius: 12px;
+    width: 95%;
+    margin: 0 1rem;
+}
+
+.tooltiptext .tooltip-effect{
+    font-family: 'Tektur Condensed SemiBold';
+    font-weight: 600;
 }
 
 @media screen and (min-width: 600px) {
     .card > .tooltiptext {
-        visibility: hidden;
         width: 200px;
         min-height: 200px;
-        background-color: rgb(86, 86, 86);
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 20px 5px;
-        position: absolute;
-        z-index: 101;
         top: -5px;
         left: 110%;
     }
-      
-    .card > .tooltiptext::after {
-        content: "";
-        position: absolute;
-        top: 25%;
-        right: 100%;
-        margin-top: -5px;
-        border-width: 10px;
-        border-style: solid;
-        border-color: transparent rgba(86, 86, 86) transparent transparent;
+}
+
+@media screen and (min-width: 1000px) {
+    .card > .tooltiptext{
+        width: 250px;
+        min-height: 275px;
+        top: -5px;
+        left: 110%;
     }
 }

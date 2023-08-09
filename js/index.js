@@ -121,10 +121,18 @@ function createTooltip(item) {
     name.innerHTML = item.name;
     tooltip.appendChild(name);
 
+    let smallLine = document.createElement("p");
+    smallLine.classList.add("tooltip-small-line");
+    tooltip.appendChild(smallLine);
+
     let description = document.createElement("p");
     description.classList.add("tooltip-description");
     description.innerHTML = item.description;
     tooltip.appendChild(description);
+
+    let line = document.createElement("p");
+    line.classList.add("tooltip-line");
+    tooltip.appendChild(line);
 
     let effect = document.createElement("p");
     effect.classList.add("tooltip-effect");

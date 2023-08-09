@@ -8,9 +8,11 @@
     --border-color : #dcdcdcca;
 }
 
-@font-face { font-family: 'Delicious'; src: url('Bombardier-Regular.ttf'); } 
-@font-face { font-family: 'Delicious-r'; src: url('Bombardier-Regular.otf'); }
-@font-face { font-family: 'Delicious-re'; src: url('Bombardier-Regular.woff'); }
+@font-face { font-family: 'Tektur'; src: url('font/Tektur-Regular.ttf'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'Tektur Bold'; src: url('font/Tektur-Bold.ttf'); font-weight: bold; font-style: normal; }
+@font-face { font-family: 'Tektur Medium'; src: url('font/Tektur-Medium.ttf'); font-weight: 500; font-style: normal; }
+@font-face { font-family: 'Tektur Condensed SemiBold'; src: url('font/Tektur_Condensed-SemiBold.ttf'); font-weight: 600; font-style: normal; }
+@font-face { font-family: 'Tektur Condensend'; src: url('font/Tektur_Condensed-Black.ttf'); font-weight: 900; font-style: normal; }
 
 *, ::before, :after {
     margin: 0;
@@ -20,7 +22,7 @@
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Delicious', sans-serif;
+    font-family: 'Tektur', sans-serif;
     font-size: 16px;
     line-height: 1.5;
     font-weight: 400;
