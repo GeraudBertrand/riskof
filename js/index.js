@@ -152,7 +152,7 @@ function searchAndReplace(text, search, item) {
     if (matches != null) {
         matches.forEach(match => {
             if(item[search] < 1){
-                item[search] = item[search] * 100;
+                item[search] = parseFloat((item[search] * 100).toFixed(2));
             }
             text = text.replace(match, "<span class='color-" + search + "'>" + item[search] + "</span>");
         });

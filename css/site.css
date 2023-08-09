@@ -8,9 +8,9 @@
     --border-color : #dcdcdcca;
 }
 
-    @font-face { font-family: 'Delicious'; src: url('Bombardier-Regular.ttf'); } 
-    @font-face { font-family: 'Delicious-r'; src: url('Bombardier-Regular.otf'); }
-    @font-face { font-family: 'Delicious-re'; src: url('Bombardier-Regular.woff'); }
+@font-face { font-family: 'Delicious'; src: url('Bombardier-Regular.ttf'); } 
+@font-face { font-family: 'Delicious-r'; src: url('Bombardier-Regular.otf'); }
+@font-face { font-family: 'Delicious-re'; src: url('Bombardier-Regular.woff'); }
 
 *, ::before, :after {
     margin: 0;
@@ -20,7 +20,7 @@
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Delicious', sans-serif;
     font-size: 16px;
     line-height: 1.5;
     font-weight: 400;
