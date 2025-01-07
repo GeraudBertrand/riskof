@@ -1,46 +1,8 @@
-
-var container1;
-var container2;
-var container3;
-var container4;
-var container5;
-var container6;
-var container7;
-var container8;
+var containers = [];
 
 window.addEventListener('load', async function () {
-
     try {
       getContainers();
-      const response = await fetch('https://riskof.gerios.fr/api/items.php?classification=all');
-      items = await response.json();
-      items.forEach(item => {
-        //switch createcard to the right container on the rarity value of the item
-        switch (item.rarity) {
-          case 1:
-            createCard(container1, item);
-            break;
-          case 2:
-            createCard(container2, item);
-            break;
-          case 3:
-            createCard(container3, item);
-            break;
-          case 4:
-            createCard(container4, item);
-            break;
-          case 5:
-            createCard(container5, item);
-            break;
-          case 6:
-            createCard(container6, item);
-            break;
-          case 7:
-            createCard(container7, item);
-            break;
-        }
-
-      });
     } catch (error) {
       console.error(error);
     }
@@ -74,35 +36,7 @@ function createCard(container, item) {
  * Get all card-container elements. Use switch of data-rarity number to set it in the right variable.
  */
 function getContainers() {
-    let containers = document.querySelectorAll(".card-container");
-    containers.forEach(container => {
-        switch (container.dataset.rarity) {
-            case "1":
-                container1 = container;
-                break;
-            case "2":
-                container2 = container;
-                break;
-            case "3":
-                container3 = container;
-                break;
-            case "4":
-                container4 = container;
-                break;
-            case "5":
-                container5 = container;
-                break;
-            case "6":
-                container6 = container;
-                break;
-            case "7":
-                container7 = container;
-                break;
-            case "8":
-                container8 = container;
-                break;
-        }
-    });
+    containers = document.querySelectorAll(".card-container");
 }
 
 /**

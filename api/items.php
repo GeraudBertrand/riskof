@@ -26,11 +26,11 @@
                     }
                 }
                 else if($_GET["classification"] == "rarity"){
-                    $data = $model->get_items_rarity(intval($_GET["id"]));
+                    $data = $model->get_items_rarity(intval($_GET["rarityLevel"]));
                     echo json_encode($data, JSON_PRETTY_PRINT);
                 }
                 else if($_GET["classification"] == "tag"){
-                    $data = $model->get_item_with_tag(intval($_GET["id"]));
+                    $data = $model->get_item_with_tag(intval($_GET["rarityLevel"]));
                     echo json_encode($data, JSON_PRETTY_PRINT);
 
                 }
