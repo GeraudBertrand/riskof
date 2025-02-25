@@ -14,15 +14,32 @@
     font-weight: 500;
     padding: 14px 16px;
     transition: all 400ms;
-    height: 100%;
+    /*height: 100%;*/
     margin-bottom: 3rem;
 }
 
-.tab .tablinks{
+.tabhead{
+    display : flex;
+    flex-direction : row;
+    align-items : center;
+    gap : 30px;
+    cursor : pointer;
+    width: fit-content;
+}
+
+.tabhead .tablinks{
     font-size: clamp(1rem, -0.25rem + 3.333vw, 2.75rem);
 }
 
-.tab span.line{
+.tabhead .icon{
+    height: clamp(1rem, -0.25rem + 3.333vw, 2.75rem);
+    transition: all 0.8s ease-in-out;
+}
+.tab:has(.tabcontent.hide) .tabhead .icon{
+    transform: rotate(450deg);
+}
+
+.tabhead span.line{
     display: block;
     width: 95%;
     background-color: var(--text-primary);
@@ -41,18 +58,32 @@
     padding: 2rem 1rem;
     margin: 0.5rem 1rem;
     border-radius: 10px;
-    transition: all 0.3s ease;
-    animation: fadeEffect 1s; /* Fading effect takes 1 second */
+    opacity: 1;
+    transition:  all 0.9s ease-in-out;
 }
+
+.tab .tabcontent.hide *, .tab .line.hide{
+    max-height: 0;
+    opacity: 0;
+}
+
 
 .tab .tabcontent:has(.card.hidden){
     justify-content: flex-start;
 }
 
+.tab .line{
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: var(--line-color);
+    margin: 1rem 1rem;
+}
 
 .card{
     margin : 8px;
     position: relative;
+    transition: all 1s ease-in-out;
 }
 
 .card.hidden{
@@ -70,8 +101,19 @@
 }
 
 .card-image:hover{
-    transform: scale(1.2);
-    transition: all 0.3s ease;
+    transform: scale(1.3);
+    transition: all 0.3s ease-in-out;
+}
+
+.card .card-ext{
+    position: absolute!important;
+    top: 0;
+    left: 0;
+}
+.card:has(.card-image:hover) .card-ext{
+    top: -15px;
+    left: -15px;
+    transition: all 0.3s ease-in-out;
 }
 
 .card > .tooltiptext {
@@ -105,7 +147,7 @@
     border-color: transparent rgba(255, 255, 255) transparent transparent;
 }
 
-.card-image:hover + .tooltiptext {
+.card:has(.card-image:hover)  .tooltiptext {
     visibility: visible;
 }
 
@@ -158,9 +200,11 @@
     }
 }
 
-
-/* Go from zero to full opacity */
-@keyframes fadeEffect {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
+@keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

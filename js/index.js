@@ -16,6 +16,8 @@ window.addEventListener('load', async function () {
         items = await response.json();
         
         if(items.length > 0){
+            
+            items.sort((a,b) => a.name.localeCompare(b.name));
             items.forEach(item => {
                 createCard(containers[parseInt(item.rarity)-1], item);
             });
@@ -47,6 +49,15 @@ function createCard(container, item) {
     image.src = "/Content/image/item/" +item.image+".webp";
     image.alt = item.name;
     card.appendChild(image);
+
+    //extension
+    if(item.orig == 3 || item.orig == 4){
+        let ext = document.createElement("img");
+        ext.classList.add("card-ext");
+        ext.src = item.orig==3? "/Content/image/SotV_Icon.webp" : "/Content/image/SotS_Icon.webp" ;
+        ext.alt = "extension " + item.orig == 3 ? "SotV" : "SotS";
+        card.appendChild(ext);
+    }
     //tooltip from span
     let tooltip = createTooltip(item);
     card.appendChild(tooltip);
