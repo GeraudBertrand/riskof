@@ -64,7 +64,7 @@
 }
 
 .card .card-image{
-    width: clamp(4rem, 0.522rem + 9.275vw, 12rem);
+    width: clamp(2rem, 0.522rem + 6.275vw, 5rem);
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
