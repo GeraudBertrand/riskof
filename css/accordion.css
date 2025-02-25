@@ -1,41 +1,37 @@
 
 .tab {
     min-height: 100px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
 }
 
+
 /* Style the buttons that are used to open the tab content */
-.tab button {
+.tab  {
     background-color: inherit;
     color: var(--text-primary);
     font-family: 'Tektur', sans-serif;
     font-size: 1.5rem;
     line-height: 1.5;
     font-weight: 500;
-    border: none;
-    outline: none;
-    cursor: pointer;
     padding: 14px 16px;
     transition: all 400ms;
     height: 100%;
-}
-  
-/* Change background color of buttons on hover */
-.tab button:hover {
-    background-color: #66666681;
-    text-decoration: underline;
-    font-size: 2rem;
+    margin-bottom: 3rem;
 }
 
-/* Create an active/current tablink class */
-.tab button.active {
-    text-decoration: underline;
+.tab .tablinks{
+    font-size: clamp(1rem, -0.25rem + 3.333vw, 2.75rem);
 }
 
+.tab span.line{
+    display: block;
+    width: 95%;
+    background-color: var(--text-primary);
+    border: solid 3px var(--text-primary);
+    border-radius: 3px;
+    margin: 1rem 0;
+}
 
-.tabcontent {
+.tab .tabcontent {
     display: flex;
     gap: 2%;
     row-gap: 10px;
@@ -45,15 +41,33 @@
     padding: 2rem 1rem;
     margin: 0.5rem 1rem;
     border-radius: 10px;
-    box-shadow: 0 5px 15px var(--border-color);
     transition: all 0.3s ease;
     animation: fadeEffect 1s; /* Fading effect takes 1 second */
 }
 
-.tabcontent.hide{
+.tab .tabcontent:has(.card.hidden){
+    justify-content: flex-start;
+}
+
+
+.card{
+    margin : 8px;
+    position: relative;
+}
+
+.card.hidden{
     display: none;
 }
 
+.card.show{
+    display: none;
+}
+
+.card .card-image{
+    width: clamp(4rem, 0.522rem + 9.275vw, 12rem);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
 
 .card-image:hover{
     transform: scale(1.2);
@@ -62,7 +76,7 @@
 
 .card > .tooltiptext {
     visibility: hidden;
-    width: 50vw;
+    width: 25vw;
     min-height: 250px;
     background-color: rgb(86, 86, 86);
     color: #fff;
@@ -71,23 +85,24 @@
     padding: 20px 5px;
     position: absolute;
     z-index: 101;
-    top: 80px;
-    left: -25%;
+    top: -25px;
+    left: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    border: solid 3px var(--text-primary);
 }
   
 .card > .tooltiptext::after {
     content: "";
     position: absolute;
-    top: 25%;
+    top: 10%;
     right: 100%;
     margin-top: -5px;
     border-width: 10px;
     border-style: solid;
-    border-color: transparent rgba(86, 86, 86) transparent transparent;
+    border-color: transparent rgba(255, 255, 255) transparent transparent;
 }
 
 .card-image:hover + .tooltiptext {
@@ -107,16 +122,16 @@
 
 .tooltiptext .tooltip-small-line{
     border: solid 3px var(--border-color);
-    border-radius: 12px;
+    border-radius: 6px;
     width: 85%;
     margin: 1.5rem 0 0.75rem 0;
 }
 
 .tooltiptext .tooltip-line{
-    border: solid 4px var(--border-color);
-    border-radius: 12px;
+    border: solid 3px var(--border-color);
+    border-radius: 6px;
     width: 95%;
-    margin: 0 1rem;
+    margin: 0.75rem 1rem;
 }
 
 .tooltiptext .tooltip-effect{
@@ -125,6 +140,7 @@
 }
 
 @media screen and (min-width: 600px) {
+
     .card > .tooltiptext {
         width: 200px;
         min-height: 200px;
@@ -137,8 +153,8 @@
     .card > .tooltiptext{
         width: 275px;
         min-height: 275px;
-        top: -5px;
-        left: 110%;
+        top: 20px;
+        left: 120%;
     }
 }
 

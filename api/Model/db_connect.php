@@ -42,7 +42,7 @@ class Model{
      * @return Item[]|null
      */
     public function get_items() {
-        $requete = $this->bdd->prepare('SELECT `id`, `name`, `rarity`, `description`, `image`, `effect`, `base1`, `stack1`, `base2`, `stack2`, `base3`, `stack3` From `item`;');
+        $requete = $this->bdd->prepare('SELECT * From `item`;');
         $requete->execute();
         $count = $requete->rowCount();
         if($count > 0)
@@ -51,7 +51,7 @@ class Model{
             $res = array();
             foreach($tab as $value)
             {
-                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
+                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['orig'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
                 array_push($res, $item);
             }
             return $res;
@@ -71,7 +71,7 @@ class Model{
         $tab = $requete->fetch(PDO::FETCH_ASSOC);
         if($tab != null || $tab != false)
         {
-            return new Item($tab['id'], $tab['name'], $tab['rarity'], $tab['description'], $tab['image'], $tab['effect'], $tab['base1'], $tab['stack1'], $tab['base2'], $tab['stack2'], $tab['base3'], $tab['stack3']);
+            return new Item($tab['id'], $tab['name'], $tab['rarity'], $tab['orig'], $tab['description'], $tab['image'], $tab['effect'], $tab['base1'], $tab['stack1'], $tab['base2'], $tab['stack2'], $tab['base3'], $tab['stack3']);
         }
         return null;
     }
@@ -82,7 +82,7 @@ class Model{
      * @return Item[]|null
      */
     public function get_items_rarity(string $rarity) {
-        $requete = $this->bdd->prepare('SELECT `id`, `name`, `rarity`, `description`, `image`, `effect`, `base1`, `stack1`, `base2`, `stack2`, `base3`, `stack3` From `item` WHERE `rarity` = :rarity ;');
+        $requete = $this->bdd->prepare('SELECT * From `item` WHERE `rarity` = :rarity ;');
         $requete->bindValue(':rarity', $rarity, PDO::PARAM_INT);
         $requete->execute();
         $count = $requete->rowCount();
@@ -92,7 +92,7 @@ class Model{
             $res = array();
             foreach($tab as $value)
             {
-                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
+                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['orig'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
                 array_push($res, $item);
             }
             return $res;
@@ -197,7 +197,7 @@ class Model{
             $res = array();
             foreach($tab as $value)
             {
-                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
+                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['orig'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
                 array_push($res, $item);
             }
             return $res;

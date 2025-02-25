@@ -15,17 +15,22 @@ async function openRarity(evt, rarity) {
         tablinks[i].classList.remove("active");
     }
 
-    var response = await fetch('https://riskof.gerios.fr/api/items.php?classification=rarity&rarityLevel='+rarity);
-    var items = await response.json();
-    console.log(items);
-    
-    items.forEach(item => {
-        createCard(containers[parseInt(rarity)-1], item);
-    });
+    try{
+        var response = await fetch('https://riskof.gerios.fr/api/items.php?classification=rarity&rarityLevel='+rarity);
+        var items = await response.json();
+        
+        if(items.length > 0){
+            items.forEach(item => {
+                createCard(containers[parseInt(rarity)-1], item);
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    }
 
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById("rarity-"+rarity).classList.remove("hide");
     console.log(evt);
     
-    evt.currentTarget.classList.add("active");
+    evt.target.classList.add("active");
   }

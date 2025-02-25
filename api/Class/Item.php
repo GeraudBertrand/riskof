@@ -7,6 +7,7 @@ class Item implements \JsonSerializable {
         private $id;
         private $name;
         private $rarity;
+        private $orig;
         private $description;
         private $image;
         private $effect;
@@ -18,7 +19,7 @@ class Item implements \JsonSerializable {
         private $stack3;
     #endregion
 
-    public function __construct($id, $name, $rarity, $description, $image, $effect, $base1, $stack1, $base2, $stack2, $base3, $stack3){
+    public function __construct($id, $name, $rarity, $orig, $description, $image, $effect, $base1, $stack1, $base2, $stack2, $base3, $stack3){
         if(!empty($id)){
             $this->id = (int)$id;
         }
@@ -29,6 +30,9 @@ class Item implements \JsonSerializable {
 
         if(!empty($rarity)){
             $this->rarity = (int)$rarity;
+        }
+        if(!empty($orig)){
+            $this->orig = (int)$orig;
         }
 
         if(!empty($description)){
@@ -146,6 +150,10 @@ class Item implements \JsonSerializable {
     */
     public function getStack3(){
         return $this->stack3;
+    }
+
+    public function getOrig(){
+        return $this->orig;
     }
     #endregion
 

@@ -22,51 +22,85 @@
     <title>Risk of Library</title>
 </head>
 <body>
-    
-    <section class="title">
-        <h1>Risk of Library</h1>
-        <p class="desc">
-            <u>A fandom site for Risk of Rain 2.</u> <br>
-            This site can be use as a wiki of the game.
-        </p>
-    </section>
+    <main>
+        <section class="title">
+            <h1>Risk of Library</h1>
+            <p class="desc">
+                <u>A fandom site for Risk of Rain 2.</u> <br>
+                This site can be use as a wiki of the game.
+            </p>
+        </section>
 
-    <section class="item-list">
-        <h2>Items</h2>
-
-        <div class="tab">
-            <button class="tablinks" onclick="openRarity(event, '1')">Common</button>
-            <button class="tablinks" onclick="openRarity(event, '2')">Uncommon</button>
-            <button class="tablinks" onclick="openRarity(event, '3')">Legendary</button>
-            <button class="tablinks" onclick="openRarity(event, '4')">Boss</button>
-            <button class="tablinks" onclick="openRarity(event, '5')">Lunar</button>
-            <button class="tablinks" onclick="openRarity(event, '6')">Void</button>
-            <button class="tablinks" onclick="openRarity(event, '7')">Equipment</button>
-        </div>
-
-        <div id="rarity-1" class="tabcontent hide card-container">
-        </div>
-        
-        <div id="rarity-2" class="tabcontent hide card-container">
-        </div>
-        
-        <div id="rarity-3" class="tabcontent hide card-container">
-        </div>
-
-        <div id="rarity-4" class="tabcontent hide card-container">
-        </div>
-
-        <div id="rarity-5" class="tabcontent hide card-container">
-        </div>
-
-        <div id="rarity-6" class="tabcontent hide card-container">
-        </div>
-
-        <div id="rarity-7" class="tabcontent hide card-container">
-        </div>
-    </section>
+        <section class="item-list">
 
 
+            <div class="item-head">
+                <h2>Items</h2>
+                <div class="search-tab">
+                    <input type="search" aria-label="search-tab" placeholder="search here" oninput="search(this.value)" />
+                </div>
+            </div>
 
+            <div class="select-orig">
+                <div class="selector">
+                    <span class="label">Survivors of the Void</span>
+                    <label class="switch">
+                        <input id="sotv" type="checkbox" aria-label="sotv switch" onclick="checkUpdate(event)">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="selector">
+                    <span class="label">Seeker of the Storm</span>
+                    <label class="switch">
+                        <input id="sots" type="checkbox" aria-label="sots switch">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="tab">
+                <h3 class="tablinks">Common</h3>
+                <span class="line"></span>
+                <div id="rarity-1" class="tabcontent card-container">
+                </div>
+            </div>
+            <div class="tab">
+                <h3 class="tablinks">Uncommon</h3>
+                <span class="line"></span>
+                <div id="rarity-2" class="tabcontent card-container">
+                </div>
+            </div>
+            <div class="tab">
+                <h3 class="tablinks">Legendary</h3>
+                <span class="line"></span>
+                <div id="rarity-3" class="tabcontent card-container">
+                </div>
+            </div>
+            <div class="tab">
+                <h3 class="tablinks">Boss</h3>
+                <span class="line"></span>
+                <div id="rarity-4" class="tabcontent card-container">
+                </div>
+            </div>
+            <div class="tab">
+                <h3 class="tablinks">Lunar</h3>
+                <span class="line"></span>
+                <div id="rarity-5" class="tabcontent card-container">
+                </div>
+            </div>
+            <div class="tab">
+                <h3 class="tablinks">Void</h3>
+                <span class="line"></span>
+                <div id="rarity-6" class="tabcontent card-container">
+                </div>
+            </div>
+            <div class="tab">
+                <h3 class="tablinks">Equipment</h3>
+                <span class="line"></span>
+                <div id="rarity-7" class="tabcontent card-container">
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

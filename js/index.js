@@ -1,11 +1,29 @@
 var containers = [];
+var items;
+
+var orig = [true, true, false, false];
 
 window.addEventListener('load', async function () {
     try {
       getContainers();
+      
     } catch (error) {
       console.error(error);
     }
+
+    try{
+        var response = await fetch('https://riskof.gerios.fr/api/items.php?classification=all');
+        items = await response.json();
+        
+        if(items.length > 0){
+            items.forEach(item => {
+                createCard(containers[parseInt(item.rarity)-1], item);
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
   });
 
 
@@ -19,6 +37,11 @@ window.addEventListener('load', async function () {
 function createCard(container, item) {
     let card = document.createElement("div");
     card.classList.add("card");
+    card.setAttribute("data-name",item.name);
+    card.setAttribute("data-orig", item.orig);
+    if(!orig[item.orig]){
+        card.classList.add("show");
+    }
     let image = document.createElement("img");
     image.classList.add("card-image");
     image.src = "/Content/image/item/" +item.image+".webp";
@@ -29,6 +52,7 @@ function createCard(container, item) {
     card.appendChild(tooltip);
 
     container.appendChild(card);
+    item.card = card;
 }
 
 
@@ -37,6 +61,13 @@ function createCard(container, item) {
  */
 function getContainers() {
     containers = document.querySelectorAll(".card-container");
+}
+
+/**
+ * Get all item card on the page
+ */
+function getCards(){
+    return document.querySelectorAll(".card");
 }
 
 /**
@@ -100,4 +131,39 @@ function searchAndReplace(text, search, item) {
         });
     }
     return text;
+}
+
+
+function search(value){
+    console.log(value);
+    var cards = getCards();
+    var filteredItem = items.filter(item => item.name.toLowerCase().includes(value.toLowerCase()));
+    cards.forEach(card =>{
+        const cardName = card.getAttribute("data-name").toLowerCase();
+        const isVisible = filteredItem.some(item => item.name.toLowerCase() == cardName);
+
+        if(isVisible){
+            card.classList.remove("hidden");
+        }else{
+            card.classList.add("hidden");
+        }
+    });
+    
+}
+
+
+
+function checkUpdate(event){
+    var input = event.target;
+    var condition = input.checked;
+    if(input.id == "sotv"){ orig[2] = condition}
+    else if (input.id == "sots") { orig[3] = condition;}
+    items.forEach(item =>{
+        const isVisible = orig[item.orig-1]
+        if(isVisible){
+            item.card.classList.remove("show");
+        }else{
+            item.card.classList.add("show");
+        }
+    });
 }
