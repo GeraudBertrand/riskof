@@ -62,9 +62,10 @@
     transition:  all 0.9s ease-in-out;
 }
 
-.tab .tabcontent.hide *, .tab .line.hide{
+.tab .tabcontent.hide, .tab .tabcontent.hide *, .tab .line.hide{
     max-height: 0;
     opacity: 0;
+    display: none;
 }
 
 
