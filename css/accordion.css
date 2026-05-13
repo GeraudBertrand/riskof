@@ -182,6 +182,13 @@
     font-weight: 600;
 }
 
+/* Couleurs sémantiques du wiki RoR2 (description_html) */
+.tooltip-effect .ror-damage  { color: #ff7f7f; }
+.tooltip-effect .ror-heal    { color: #7cfc00; }
+.tooltip-effect .ror-utility { color: #77bbff; }
+.tooltip-effect .ror-void    { color: #9572d6; }
+.tooltip-effect .ror-stack   { color: #cccccc; font-style: italic; font-weight: 400; }
+
 @media screen and (min-width: 600px) {
 
     .card > .tooltiptext {

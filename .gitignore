@@ -1,0 +1,18 @@
+# Secrets — never commit
+admin/auth_credentials.php
+
+# Runtime / temporary files
+Content/import_log.txt
+ror_*_module.json
+/tmp/
+
+# OS / editor artefacts
+Thumbs.db
+*~
+.DS_Store
+*.swp
+*.swo
+
+# IDE
+.vscode/
+.idea/

@@ -1,222 +1,184 @@
-<?php 
+<?php
 
-require_once './Class/Item.php';
-require_once './Class/Rarity.php';
-require_once './Class/Tag.php';
+require_once __DIR__ . '/../Class/Item.php';
+require_once __DIR__ . '/../Class/Equipment.php';
+require_once __DIR__ . '/../Class/Rarity.php';
+require_once __DIR__ . '/../Class/Tag.php';
 
 class Model{
 
     private static $instance = null;
-  
+
     private $bdd;
-  
-    /**
-     * Constructor
-     */
+
     private function __construct() {
-        require ('credential.php');
+        require __DIR__ . '/credential.php';
         try {
             $this->bdd = new PDO($dns, $login, $mdp);
             $this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->bdd->exec('SET CHARACTER SET utf8');
+            $this->bdd->exec('SET CHARACTER SET utf8mb4');
         } catch (PDOException $e) {
-            die('<p>Erreur acces BD : '.$e->getCode().' : '.$e->getMessage().'</p>');
+            $msg = 'Erreur BDD : ' . $e->getMessage();
+            // Web : renvoie un JSON propre si rien n'a encore été émis.
+            if (php_sapi_name() !== 'cli' && !headers_sent()) {
+                header('Content-Type: application/json');
+                http_response_code(500);
+                die(json_encode(['error' => $msg]));
+            }
+            // CLI ou output déjà commencé (streaming, import script) :
+            // on relance l'exception → l'appelant gère la sortie.
+            throw new RuntimeException($msg, 0, $e);
         }
     }
 
-    /**
-     * Get the instance of the model
-     *
-     * @return Model
-     */
-    public static function getModel(){
+    public static function getModel(): Model {
         if (self::$instance === null) {
             self::$instance = new self();
         }
         return self::$instance;
     }
 
-
     /**
-     * Get all the items
-     * @return Item[]|null
+     * Expose le PDO pour les scripts d'admin / import qui ont besoin d'écrire
+     * directement (transactions, upserts en masse, etc.).
      */
+    public function getPdo(): PDO {
+        return $this->bdd;
+    }
+
+    // ============================================================
+    //  Items
+    // ============================================================
+
+    /** @return Item[]|null */
     public function get_items() {
-        $requete = $this->bdd->prepare('SELECT * From `item`;');
-        $requete->execute();
-        $count = $requete->rowCount();
-        if($count > 0)
-        {
-            $tab = $requete->fetchAll(PDO::FETCH_ASSOC);
-            $res = array();
-            foreach($tab as $value)
-            {
-                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['orig'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
-                array_push($res, $item);
-            }
-            return $res;
-        }
-        return null;
+        $rq = $this->bdd->prepare('SELECT * FROM `item` ORDER BY `name`;');
+        $rq->execute();
+        $rows = $rq->fetchAll(PDO::FETCH_ASSOC);
+        if (!$rows) return null;
+        return array_map(fn($r) => new Item($r), $rows);
     }
 
-    /**
-     * Get item on an id
-     * @param int $id
-     * @return Item|null
-     */
-    public function get_item(int $id) {
-        $requete = $this->bdd->prepare('SELECT * From `item` WHERE `id` = :id ;');
-        $requete->bindValue(':id', $id, PDO::PARAM_INT);
-        $requete->execute();
-        $tab = $requete->fetch(PDO::FETCH_ASSOC);
-        if($tab != null || $tab != false)
-        {
-            return new Item($tab['id'], $tab['name'], $tab['rarity'], $tab['orig'], $tab['description'], $tab['image'], $tab['effect'], $tab['base1'], $tab['stack1'], $tab['base2'], $tab['stack2'], $tab['base3'], $tab['stack3']);
-        }
-        return null;
+    public function get_item(int $id): ?Item {
+        $rq = $this->bdd->prepare('SELECT * FROM `item` WHERE `id` = :id;');
+        $rq->bindValue(':id', $id, PDO::PARAM_INT);
+        $rq->execute();
+        $row = $rq->fetch(PDO::FETCH_ASSOC);
+        return $row ? new Item($row) : null;
     }
 
-    /**
-     * Get all the items by rarity
-     * @param int $rarity
-     * @return Item[]|null
-     */
-    public function get_items_rarity(string $rarity) {
-        $requete = $this->bdd->prepare('SELECT * From `item` WHERE `rarity` = :rarity ;');
-        $requete->bindValue(':rarity', $rarity, PDO::PARAM_INT);
-        $requete->execute();
-        $count = $requete->rowCount();
-        if($count > 0)
-        {
-            $tab = $requete->fetchAll(PDO::FETCH_ASSOC);
-            $res = array();
-            foreach($tab as $value)
-            {
-                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['orig'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
-                array_push($res, $item);
-            }
-            return $res;
-        }
-        return null;
+    /** @return Item[]|null */
+    public function get_items_rarity($rarity) {
+        $rq = $this->bdd->prepare('SELECT * FROM `item` WHERE `rarity` = :r ORDER BY `name`;');
+        $rq->bindValue(':r', (int)$rarity, PDO::PARAM_INT);
+        $rq->execute();
+        $rows = $rq->fetchAll(PDO::FETCH_ASSOC);
+        if (!$rows) return null;
+        return array_map(fn($r) => new Item($r), $rows);
     }
 
+    /** @return Item[]|null */
+    public function get_item_with_tag(int $idTag) {
+        $rq = $this->bdd->prepare(
+            'SELECT * FROM `item`
+              WHERE `id` IN (SELECT `id_item` FROM `link_item_tag` WHERE `id_tag` = :idTag)
+              ORDER BY `name`;'
+        );
+        $rq->bindValue(':idTag', $idTag, PDO::PARAM_INT);
+        $rq->execute();
+        $rows = $rq->fetchAll(PDO::FETCH_ASSOC);
+        if (!$rows) return null;
+        return array_map(fn($r) => new Item($r), $rows);
+    }
 
+    // ============================================================
+    //  Equipments
+    // ============================================================
 
-    /**
-     * Get all the rarities
-     * @return Rarity[]|null
-     */
+    /** @return Equipment[]|null */
+    public function get_equipments() {
+        $rq = $this->bdd->prepare('SELECT * FROM `equipment` ORDER BY `name`;');
+        $rq->execute();
+        $rows = $rq->fetchAll(PDO::FETCH_ASSOC);
+        if (!$rows) return null;
+        return array_map(fn($r) => new Equipment($r), $rows);
+    }
+
+    public function get_equipment(int $id): ?Equipment {
+        $rq = $this->bdd->prepare('SELECT * FROM `equipment` WHERE `id` = :id;');
+        $rq->bindValue(':id', $id, PDO::PARAM_INT);
+        $rq->execute();
+        $row = $rq->fetch(PDO::FETCH_ASSOC);
+        return $row ? new Equipment($row) : null;
+    }
+
+    // ============================================================
+    //  Rarities / Tags
+    // ============================================================
+
+    /** @return Rarity[]|null */
     public function get_rarities() {
-        $requete = $this->bdd->prepare('SELECT * From `rarity` ;');
-        $requete->execute();
-        $count = $requete->rowCount();
-        if($count > 0)
-        {
-            $tab = $requete->fetchAll(PDO::FETCH_ASSOC);
-            $res = array();
-            foreach($tab as $value)
-            {
-                $rarity = new Rarity($value['id'], $value['name'], $value['color']);
-                array_push($res, $rarity);
-            }
-            return $res;
-        }
-        return null;
+        $rq = $this->bdd->prepare('SELECT * FROM `rarity`;');
+        $rq->execute();
+        $rows = $rq->fetchAll(PDO::FETCH_ASSOC);
+        if (!$rows) return null;
+        $out = [];
+        foreach ($rows as $v) $out[] = new Rarity($v['id'], $v['name'], $v['color']);
+        return $out;
     }
 
-    /**
-     * Get rarity on an id
-     * @param int $id
-     * @return Rarity|null
-     */
-    public function get_rarity(int $id) {
-        $requete = $this->bdd->prepare('SELECT * From `rarity` WHERE `id` = :id ;');
-        $requete->bindValue(':id', $id, PDO::PARAM_INT);
-        $requete->execute();
-        $tab = $requete->fetch(PDO::FETCH_ASSOC);
-        if($tab != null || $tab != false)
-        {
-            return new Rarity($tab['id'], $tab['name'], $tab['color']);
-        }
-        return null;
+    public function get_rarity(int $id): ?Rarity {
+        $rq = $this->bdd->prepare('SELECT * FROM `rarity` WHERE `id` = :id;');
+        $rq->bindValue(':id', $id, PDO::PARAM_INT);
+        $rq->execute();
+        $v = $rq->fetch(PDO::FETCH_ASSOC);
+        return $v ? new Rarity($v['id'], $v['name'], $v['color']) : null;
     }
 
-    /**
-     * Get all the tags
-     * @return Tag[]|null
-     */
+    /** @return Tag[]|null */
     public function get_tags() {
-        $requete = $this->bdd->prepare('SELECT * From `tag` ;');
-        $requete->execute();
-        $count = $requete->rowCount();
-        if($count > 0)
-        {
-            $tab = $requete->fetchAll(PDO::FETCH_ASSOC);
-            $res = array();
-            foreach($tab as $value)
-            {
-                $tag = new Tag($value['id'], $value['name']);
-                array_push($res, $tag);
-            }
-            return $res;
-        }
-        return null;
+        $rq = $this->bdd->prepare('SELECT * FROM `tag`;');
+        $rq->execute();
+        $rows = $rq->fetchAll(PDO::FETCH_ASSOC);
+        if (!$rows) return null;
+        $out = [];
+        foreach ($rows as $v) $out[] = new Tag($v['id'], $v['name']);
+        return $out;
     }
 
-    /**
-     * Get tag on an id
-     * @param int $id
-     * @return Tag|null
-     */
-    public function get_tag(int $id) {
-        $requete = $this->bdd->prepare('SELECT * From `tag` WHERE `id` = :id ;');
-        $requete->bindValue(':id', $id, PDO::PARAM_INT);
-        $requete->execute();
-        $tab = $requete->fetch(PDO::FETCH_ASSOC);
-        if($tab != null || $tab != false)
-        {
-            return new Tag($tab['id'], $tab['name']);
-        }
-        return null;
+    public function get_tag(int $id): ?Tag {
+        $rq = $this->bdd->prepare('SELECT * FROM `tag` WHERE `id` = :id;');
+        $rq->bindValue(':id', $id, PDO::PARAM_INT);
+        $rq->execute();
+        $v = $rq->fetch(PDO::FETCH_ASSOC);
+        return $v ? new Tag($v['id'], $v['name']) : null;
     }
 
+    // ============================================================
+    //  Extensions (DLC)
+    // ============================================================
 
     /**
-     * Get all the items with a tag
-     * @param int $idTag
-     * @return Item[]|null
+     * @param bool $withVanilla true → inclut les extensions sans icon (Vanilla)
+     * @return array<int, array<string, mixed>>
      */
-    public function get_item_with_tag(int $idTag){
-        $requete = $this->bdd->prepare('SELECT `id`, `name`, `rarity`, `description`, `image`, `effect`, `base1`, `stack1`, `base2`, `stack2`, `base3`, `stack3` From `item` WHERE `id` IN (SELECT `id_item` FROM `link_item_tag` WHERE `id_tag` = :idTag) ;');
-        $requete->bindValue(':idTag', $idTag, PDO::PARAM_INT);
-        $requete->execute();
-        $count = $requete->rowCount();
-        if($count > 0)
-        {
-            $tab = $requete->fetchAll(PDO::FETCH_ASSOC);
-            $res = array();
-            foreach($tab as $value)
-            {
-                $item = new Item($value['id'], $value['name'], $value['rarity'], $value['orig'], $value['description'], $value['image'], $value['effect'], $value['base1'], $value['stack1'], $value['base2'], $value['stack2'], $value['base3'], $value['stack3']);
-                array_push($res, $item);
-            }
-            return $res;
-        }
-        return null;
+    public function get_extensions(bool $withVanilla = false): array {
+        $sql = 'SELECT `id`, `name`, `short_code`, `icon` FROM `extension`';
+        if (!$withVanilla) $sql .= ' WHERE `icon` IS NOT NULL';
+        $sql .= ' ORDER BY `id`';
+        $rq = $this->bdd->prepare($sql);
+        $rq->execute();
+        return $rq->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    // ============================================================
+    //  Legacy
+    // ============================================================
 
-    /**
-     * Insert a new image into the database with the item_id and item_image
-     * item_image is a blob
-     * @param int $id
-     * @param string $image
-     */
-    public function insert_image(int $id, $image) {
-        $requete = $this->bdd->prepare('INSERT INTO `item_image` (`item_id`, `image`) VALUES (:id, :image);');
-        $requete->bindValue(':id', $id, PDO::PARAM_INT);
-        $requete->bindValue(':image', $image, PDO::PARAM_STR);
-        $requete->execute();
+    public function insert_image(int $id, $image): void {
+        $rq = $this->bdd->prepare('INSERT INTO `item_image` (`item_id`, `image`) VALUES (:id, :image);');
+        $rq->bindValue(':id', $id, PDO::PARAM_INT);
+        $rq->bindValue(':image', $image, PDO::PARAM_STR);
+        $rq->execute();
     }
 }
-?>

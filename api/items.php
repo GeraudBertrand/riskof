@@ -2,7 +2,7 @@
     // Se connecter à la base de données
     require_once  "Model/db_connect.php";
     $model = Model::getModel();
-    
+
     // Récupérer la méthode de la requête
     $request_method = $_SERVER["REQUEST_METHOD"];
 
