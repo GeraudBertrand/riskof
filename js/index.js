@@ -19,7 +19,12 @@ window.addEventListener('load', async function () {
             
             items.sort((a,b) => a.name.localeCompare(b.name));
             items.forEach(item => {
-                createCard(containers[parseInt(item.rarity)-1], item);
+                const container = containers[item.rarity - 1];
+                if (container) {
+                    createCard(container, item);
+                } else {
+                    console.warn("Skipping item with unsupported rarity:", item);
+                }
             });
         }
     } catch (error) {
@@ -46,7 +51,7 @@ function createCard(container, item) {
     }
     let image = document.createElement("img");
     image.classList.add("card-image");
-    image.src = "/Content/image/item/" +item.image+".webp";
+    setImageSource(image, item);
     image.alt = item.name;
     card.appendChild(image);
 
@@ -55,7 +60,7 @@ function createCard(container, item) {
         let ext = document.createElement("img");
         ext.classList.add("card-ext");
         ext.src = item.orig==3? "/Content/image/SotV_Icon.webp" : "/Content/image/SotS_Icon.webp" ;
-        ext.alt = "extension " + item.orig == 3 ? "SotV" : "SotS";
+        ext.alt = "extension " + (item.orig == 3 ? "SotV" : "SotS");
         card.appendChild(ext);
     }
     //tooltip from span
@@ -64,6 +69,34 @@ function createCard(container, item) {
 
     container.appendChild(card);
     item.card = card;
+}
+
+function setImageSource(image, item) {
+    const imageName = item.image || "";
+    const apiBaseName = imageName.replace(/\.webp$/i, "");
+    const itemBaseName = (item.name || "").replace(/[^a-zA-Z0-9]/g, "");
+    const itemWithoutPrefix = (item.name || "").replace(/^\d+\s*/, "").replace(/[^a-zA-Z0-9]/g, "");
+    const lastNamePart = itemWithoutPrefix.match(/[A-Z][a-z0-9]*$/);
+    const shortName = lastNamePart ? lastNamePart[0] + "Icon.webp" : "";
+    const candidates = [
+        /^\d/.test(item.name || "") ? shortName : "",
+        itemBaseName + "Icon.webp",
+        itemBaseName + ".webp",
+        itemWithoutPrefix + "Icon.webp",
+        itemWithoutPrefix + ".webp",
+        shortName,
+        imageName,
+        apiBaseName + "Icon.webp"
+    ].filter((candidate, index, all) => candidate && all.indexOf(candidate) === index);
+
+    let candidateIndex = 0;
+    image.onerror = () => {
+        candidateIndex += 1;
+        if (candidateIndex < candidates.length) {
+            image.src = "/Content/image/item/" + candidates[candidateIndex];
+        }
+    };
+    image.src = "/Content/image/item/" + candidates[candidateIndex];
 }
 
 

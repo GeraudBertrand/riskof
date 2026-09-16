@@ -59,6 +59,48 @@ class Model{
         return null;
     }
 
+    public function create_item(array $data) {
+        $requete = $this->bdd->prepare(
+            'INSERT INTO `item` (`name`, `rarity`, `orig`, `description`, `image`, `effect`, `base1`, `stack1`, `base2`, `stack2`, `base3`, `stack3`)
+             VALUES (:name, :rarity, :orig, :description, :image, :effect, :base1, :stack1, :base2, :stack2, :base3, :stack3)'
+        );
+        $this->bind_item_values($requete, $data);
+        $requete->execute();
+        return (int)$this->bdd->lastInsertId();
+    }
+
+    public function update_item(int $id, array $data) {
+        $requete = $this->bdd->prepare(
+            'UPDATE `item` SET `name` = :name, `rarity` = :rarity, `orig` = :orig, `description` = :description,
+             `image` = :image, `effect` = :effect, `base1` = :base1, `stack1` = :stack1, `base2` = :base2,
+             `stack2` = :stack2, `base3` = :base3, `stack3` = :stack3 WHERE `id` = :id'
+        );
+        $this->bind_item_values($requete, $data);
+        $requete->bindValue(':id', $id, PDO::PARAM_INT);
+        $requete->execute();
+        return $requete->rowCount() > 0;
+    }
+
+    public function delete_item(int $id) {
+        $requete = $this->bdd->prepare('DELETE FROM `item` WHERE `id` = :id');
+        $requete->bindValue(':id', $id, PDO::PARAM_INT);
+        $requete->execute();
+        return $requete->rowCount() > 0;
+    }
+
+    private function bind_item_values(PDOStatement $requete, array $data) {
+        $requete->bindValue(':name', $data['name'], PDO::PARAM_STR);
+        $requete->bindValue(':rarity', $data['rarity'], PDO::PARAM_INT);
+        $requete->bindValue(':orig', $data['orig'], PDO::PARAM_INT);
+        $requete->bindValue(':description', $data['description'], PDO::PARAM_STR);
+        $requete->bindValue(':image', $data['image'], PDO::PARAM_STR);
+        $requete->bindValue(':effect', $data['effect'], PDO::PARAM_STR);
+
+        foreach (['base1', 'stack1', 'base2', 'stack2', 'base3', 'stack3'] as $field) {
+            $requete->bindValue(':' . $field, $data[$field] === null ? null : (float)$data[$field], $data[$field] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        }
+    }
+
     /**
      * Get item on an id
      * @param int $id

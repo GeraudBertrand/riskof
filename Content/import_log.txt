@@ -1,0 +1,40 @@
+=== riskof import from wiki ===
+dry_run=no no_images=no
+Fetch Module:Items/Data ...
+  104933 bytes
+  189 items parsed
+Fetch Module:Equipment/Data ...
+  16948 bytes
+  44 equipments parsed
+DB transaction committed.
+Download 233 icons ...
+  ... 20/233
+  ... 40/233
+  ... 60/233
+  ... 80/233
+  ... 100/233
+  ... 120/233
+  ... 140/233
+  ... 160/233
+  ... 180/233
+  ... 200/233
+  ... 220/233
+Images: 223 ok, 10 fail.
+
+==== SUMMARY ====
+Items     : 0 added, 189 updated
+Equipments: 0 added, 44 updated
+Images    : 223 ok, 10 fail
+Errors    : 10
+  - image missing: BoostDamage
+  - image missing: BoostHP
+  - image missing: BurnNearby
+  - image missing: CritHeal
+  - image missing: CrippleWardOnLevel
+  - image missing: DrizzlePlayerHelper
+  - image missing: Ghost
+  - image missing: HealthDecay
+  - image missing: MageAttunement
+  - image missing: MonsoonPlayerHelper
+Total time: 166.71s
+IMPORT DONE
