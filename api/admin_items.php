@@ -35,7 +35,7 @@ function item_data(array $source, string $image): array {
 
     $rarity = (int)$source['rarity'];
     $orig = (int)$source['orig'];
-    if ($rarity < 1 || $rarity > 10 || $orig < 1 || $orig > 4) {
+    if ($rarity < 1 || $rarity > 10 || $orig < 1 || $orig > 6) {
         respond(['error' => 'Rarity or origin is outside the supported range'], 422);
     }
 

@@ -7,8 +7,17 @@ const imagePreview = document.querySelector('#image-preview');
 const previewEmpty = document.querySelector('#preview-empty');
 const fileName = document.querySelector('#file-name');
 const fields = [...form.querySelectorAll('input, textarea, select')];
+const effectField = document.querySelector('#effect');
 let items = [];
 let selectedId = null;
+const originLabels = {
+    1: 'Jeu de base',
+    2: 'Jeu de base (réserver)',
+    3: 'Survivors of the Void',
+    4: 'Seekers of the Storm',
+    5: 'Alloy Collective',
+    6: 'Hallowed Concepts'
+};
 
 function showStatus(message, type = 'success') {
     status.textContent = message;
@@ -22,6 +31,16 @@ function clearStatus() {
 
 function imageUrl(item) {
     return `../Content/image/item/${encodeURIComponent(item.image || '')}`;
+}
+
+function insertToken(token) {
+    const start = effectField.selectionStart;
+    const end = effectField.selectionEnd;
+    const value = effectField.value;
+    effectField.value = value.slice(0, start) + token + value.slice(end);
+    effectField.focus();
+    effectField.setSelectionRange(start + token.length, start + token.length);
+    effectField.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
 function renderList() {
@@ -51,7 +70,7 @@ function renderList() {
         const name = document.createElement('strong');
         name.textContent = item.name || '(sans nom)';
         const meta = document.createElement('small');
-        meta.textContent = `Rareté ${item.rarity} · Origine ${item.orig}`;
+        meta.textContent = `Rareté ${item.rarity} · ${originLabels[item.orig] || `Origine ${item.orig}`}`;
         copy.append(name, meta);
         button.append(image, copy);
         button.addEventListener('click', () => selectItem(Number(item.id)));
@@ -166,6 +185,9 @@ document.querySelector('#delete-item').addEventListener('click', async () => {
 document.querySelector('#new-item').addEventListener('click', resetForm);
 document.querySelector('#reset-form').addEventListener('click', resetForm);
 search.addEventListener('input', renderList);
+document.querySelectorAll('.token-button').forEach(button => {
+    button.addEventListener('click', () => insertToken(button.dataset.token));
+});
 imageInput.addEventListener('change', () => {
     const file = imageInput.files[0];
     if (!file) return;

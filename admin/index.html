@@ -72,9 +72,11 @@
                             <label for="orig">Origine *</label>
                             <select id="orig" name="orig" class="field" required>
                                 <option value="1">1 · Jeu de base</option>
-                                <option value="2">2 · DLC 1</option>
+                                <option value="2">2 · Jeu de base (réserver)</option>
                                 <option value="3">3 · Survivors of the Void</option>
                                 <option value="4">4 · Seekers of the Storm</option>
+                                <option value="5">5 · Alloy Collective</option>
+                                <option value="6">6 · Hallowed Concepts</option>
                             </select>
                         </div>
                     </div>
@@ -86,6 +88,15 @@
                         </div>
                         <div class="field-group field-wide">
                             <label for="effect">Effet *</label>
+                            <div class="token-toolbar" aria-label="Insérer une valeur dynamique">
+                                <span class="token-toolbar-label">Insérer :</span>
+                                <button class="token-button" type="button" data-token="%base1%">%base1%</button>
+                                <button class="token-button" type="button" data-token="%stack1%">%stack1%</button>
+                                <button class="token-button" type="button" data-token="%base2%">%base2%</button>
+                                <button class="token-button" type="button" data-token="%stack2%">%stack2%</button>
+                                <button class="token-button" type="button" data-token="%base3%">%base3%</button>
+                                <button class="token-button" type="button" data-token="%stack3%">%stack3%</button>
+                            </div>
                             <textarea id="effect" name="effect" class="field" rows="4" placeholder="Utilise %base1%, %stack1%, etc." required></textarea>
                         </div>
                     </div>
