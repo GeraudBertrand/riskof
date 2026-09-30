@@ -20,54 +20,54 @@ class Item implements \JsonSerializable {
     #endregion
 
     public function __construct($id, $name, $rarity, $orig, $description, $image, $effect, $base1, $stack1, $base2, $stack2, $base3, $stack3){
-        if(!empty($id)){
+        if(isset($id)){
             $this->id = (int)$id;
         }
 
-        if(!empty($name)){
+        if(isset($name)){
             $this->name = (string)$name;
         }
 
-        if(!empty($rarity)){
+        if(isset($rarity)){
             $this->rarity = (int)$rarity;
         }
-        if(!empty($orig)){
+        if(isset($orig)){
             $this->orig = (int)$orig;
         }
 
-        if(!empty($description)){
+        if(isset($description)){
             $this->description = (string)$description;
         }
 
-        if(!empty($image)){
+        if(isset($image)){
             $this->image = $image;
         }
 
-        if(!empty($effect)){
+        if(isset($effect)){
             $this->effect = (string)$effect;
         }
 
-        if(!empty($base1)){
+        if(isset($base1)){
             $this->base1 = (float)$base1;
         }
 
-        if(!empty($stack1)){
+        if(isset($stack1)){
             $this->stack1 = (float)$stack1;
         }
 
-        if(!empty($base2)){
+        if(isset($base2)){
             $this->base2 = (float)$base2;
         }
 
-        if(!empty($stack2)){
+        if(isset($stack2)){
             $this->stack2 = (float)$stack2;
         }
 
-        if(!empty($base3)){
+        if(isset($base3)){
             $this->base3 = (float)$base3;
         }
 
-        if(!empty($stack3)){
+        if(isset($stack3)){
             $this->stack3 = (float)$stack3;
         }
     }

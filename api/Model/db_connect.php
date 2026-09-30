@@ -229,7 +229,7 @@ class Model{
      * @return Item[]|null
      */
     public function get_item_with_tag(int $idTag){
-        $requete = $this->bdd->prepare('SELECT `id`, `name`, `rarity`, `description`, `image`, `effect`, `base1`, `stack1`, `base2`, `stack2`, `base3`, `stack3` From `item` WHERE `id` IN (SELECT `id_item` FROM `link_item_tag` WHERE `id_tag` = :idTag) ;');
+        $requete = $this->bdd->prepare('SELECT `id`, `name`, `rarity`, `orig`, `description`, `image`, `effect`, `base1`, `stack1`, `base2`, `stack2`, `base3`, `stack3` From `item` WHERE `id` IN (SELECT `id_item` FROM `link_item_tag` WHERE `id_tag` = :idTag) ;');
         $requete->bindValue(':idTag', $idTag, PDO::PARAM_INT);
         $requete->execute();
         $count = $requete->rowCount();

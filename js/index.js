@@ -1,7 +1,8 @@
 var containers = [];
 var items;
 
-var orig = [true, true, false, false];
+// visibility per item.orig - 1: base, reserved, SotV, SotS, Alloy Collective, Hallowed Concepts (no switch yet for the last two)
+var orig = [true, true, false, false, true, true];
 
 window.addEventListener('load', async function () {
     try {
@@ -12,7 +13,7 @@ window.addEventListener('load', async function () {
     }
 
     try{
-        var response = await fetch('https://riskof.gerios.fr/api/items.php?classification=all');
+        var response = await fetch('/api/items.php?classification=all');
         items = await response.json();
         
         if(items.length > 0){
@@ -46,8 +47,8 @@ function createCard(container, item) {
     card.classList.add("card");
     card.setAttribute("data-name",item.name);
     card.setAttribute("data-orig", item.orig);
-    if(!orig[item.orig]){
-        card.classList.add("show");
+    if(!orig[item.orig - 1]){
+        card.classList.add("dlc-hidden");
     }
     let image = document.createElement("img");
     image.classList.add("card-image");
@@ -164,17 +165,11 @@ function createTooltip(item) {
  * @returns {String} text
  */
 function searchAndReplace(text, search, item) {
-    let tosearch = "%" + search +"%";
-    let matches = text.match(tosearch);
-    if (matches != null) {
-        matches.forEach(match => {
-            if(item[search] < 1){
-                item[search] = parseFloat((item[search] * 100).toFixed(2));
-            }
-            text = text.replace(match, "<span class='color-" + search + "'>" + item[search] + "</span>");
-        });
+    let value = item[search];
+    if(value < 1){
+        value = parseFloat((value * 100).toFixed(2));
     }
-    return text;
+    return text.replaceAll("%" + search + "%", "<span class='color-" + search + "'>" + value + "</span>");
 }
 
 
@@ -205,9 +200,9 @@ function checkUpdate(event){
     items.forEach(item =>{
         const isVisible = orig[item.orig-1]
         if(isVisible){
-            item.card.classList.remove("show");
+            item.card.classList.remove("dlc-hidden");
         }else{
-            item.card.classList.add("show");
+            item.card.classList.add("dlc-hidden");
         }
     });
 }
