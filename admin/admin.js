@@ -15,7 +15,7 @@ const originLabels = {
     2: 'Jeu de base (réserver)',
     3: 'Survivors of the Void',
     4: 'Seekers of the Storm',
-    5: 'Alloy Collective',
+    5: 'Alloyed Collective',
     6: 'Hallowed Concepts'
 };
 

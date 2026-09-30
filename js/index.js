@@ -1,8 +1,9 @@
 var containers = [];
 var items;
 
-// visibility per item.orig - 1: base, reserved, SotV, SotS, Alloy Collective, Hallowed Concepts (no switch yet for the last two)
-var orig = [true, true, false, false, true, true];
+// visibility per item.orig - 1: base, reserved, SotV, SotS, Alloyed Collective, Hallowed Concepts (no switch yet)
+var orig = [true, true, false, false, false, true];
+var extIcons = {3: "SotV", 4: "SotS", 5: "AC"};
 
 window.addEventListener('load', async function () {
     try {
@@ -57,11 +58,12 @@ function createCard(container, item) {
     card.appendChild(image);
 
     //extension
-    if(item.orig == 3 || item.orig == 4){
+    if(extIcons[item.orig]){
         let ext = document.createElement("img");
         ext.classList.add("card-ext");
-        ext.src = item.orig==3? "/Content/image/SotV_Icon.webp" : "/Content/image/SotS_Icon.webp" ;
-        ext.alt = "extension " + (item.orig == 3 ? "SotV" : "SotS");
+        ext.src = "/Content/image/" + extIcons[item.orig] + "_Icon.webp";
+        ext.alt = "extension " + extIcons[item.orig];
+        ext.onerror = () => ext.remove();
         card.appendChild(ext);
     }
     //tooltip from span
@@ -73,31 +75,9 @@ function createCard(container, item) {
 }
 
 function setImageSource(image, item) {
-    const imageName = item.image || "";
-    const apiBaseName = imageName.replace(/\.webp$/i, "");
-    const itemBaseName = (item.name || "").replace(/[^a-zA-Z0-9]/g, "");
-    const itemWithoutPrefix = (item.name || "").replace(/^\d+\s*/, "").replace(/[^a-zA-Z0-9]/g, "");
-    const lastNamePart = itemWithoutPrefix.match(/[A-Z][a-z0-9]*$/);
-    const shortName = lastNamePart ? lastNamePart[0] + "Icon.webp" : "";
-    const candidates = [
-        /^\d/.test(item.name || "") ? shortName : "",
-        itemBaseName + "Icon.webp",
-        itemBaseName + ".webp",
-        itemWithoutPrefix + "Icon.webp",
-        itemWithoutPrefix + ".webp",
-        shortName,
-        imageName,
-        apiBaseName + "Icon.webp"
-    ].filter((candidate, index, all) => candidate && all.indexOf(candidate) === index);
-
-    let candidateIndex = 0;
-    image.onerror = () => {
-        candidateIndex += 1;
-        if (candidateIndex < candidates.length) {
-            image.src = "/Content/image/item/" + candidates[candidateIndex];
-        }
-    };
-    image.src = "/Content/image/item/" + candidates[candidateIndex];
+    if (item.image) {
+        image.src = "/Content/image/item/" + encodeURIComponent(item.image);
+    }
 }
 
 
@@ -197,6 +177,7 @@ function checkUpdate(event){
     var condition = input.checked;
     if(input.id == "sotv"){ orig[2] = condition}
     else if (input.id == "sots") { orig[3] = condition;}
+    else if (input.id == "ac") { orig[4] = condition;}
     items.forEach(item =>{
         const isVisible = orig[item.orig-1]
         if(isVisible){
