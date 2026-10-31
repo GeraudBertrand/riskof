@@ -20,7 +20,9 @@ class Model{
             $this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->bdd->exec('SET CHARACTER SET utf8');
         } catch (PDOException $e) {
-            die('<p>Erreur acces BD : '.$e->getCode().' : '.$e->getMessage().'</p>');
+            error_log('DB connection failed: ' . $e->getMessage());
+            http_response_code(500);
+            die('Erreur acces BD');
         }
     }
 
